@@ -8,6 +8,7 @@ exports.getAllPosts = (req,res,next) => {
     .then(result => {
         res.status(200).json({
             post : result,
+            count : result.length,
             message: 'post list fetched successfully'
         });
     })
@@ -59,9 +60,11 @@ exports.getPostDetail = (req,res,next) =>{
 
 exports.deletePost = (req,res,next) => {
     const id = req.params.postId;
-    Post.remove({_id : id})
+    Post.findByIdAndDelete({_id : id})
     .exec()
     .then(result => {
+        // console.log(result);
+        
         res.status(200).json({
             message : 'Post deleted successfully'
         });
@@ -73,19 +76,39 @@ exports.deletePost = (req,res,next) => {
     });
 }
 
-exports.updatePost = (req,res,next) => {
+// exports.updatePost = (req,res,next) => {
+//     const id = req.params.postId;
+//     const updatePost = {};
+
+//     for(const data of req.body){
+//         updatePost[data.propName] = data.value;
+//     }
+
+//     Post.updateOne({_id : id}, {$set : updatePost})
+//     .exec()
+//     .then(result => {
+//         res.status(200).json({
+//             updatedData: updatePost,
+//             message : 'Post detail updated successfully'
+//         });
+//     })
+//     .catch(err => {
+//         res.status(500).json({
+//             error: err
+//         });
+//     });
+// }
+
+
+exports.updatePost = async (req,res,next) => {
     const id = req.params.postId;
-    const updatePost = {};
-
-    for(const data of req.body){
-        updatePost[data.propName] = data.value;
-    }
-
-    Post.updateOne({_id : id}, {$set : updatePost})
+    
+    await Post.findByIdAndUpdate({_id : id}, {$set: req.body})
     .exec()
     .then(result => {
+        console.log(result);
         res.status(200).json({
-            updatedData: updatePost,
+            // updatedData: updatePost,
             message : 'Post detail updated successfully'
         });
     })
