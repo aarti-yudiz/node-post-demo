@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const postRoute = require('./api/routes/post');
+const userRoute = require('./api/routes/user');
 
 mongoose.set("strictQuery",false);
 mongoose.connect('mongodb://localhost:27017/node-post-demo');
@@ -15,6 +16,7 @@ app.use(bodyParser.urlencoded({extended : false}));
 app.use(bodyParser.json());
 
 app.use('/posts', postRoute);
+app.use('/users',userRoute);
 
 app.use((req,res,next) => {
     const error = new Error('data not found');

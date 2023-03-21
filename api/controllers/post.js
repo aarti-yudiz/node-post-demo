@@ -103,10 +103,10 @@ exports.deletePost = (req,res,next) => {
 exports.updatePost = async (req,res,next) => {
     const id = req.params.postId;
     
-    await Post.findByIdAndUpdate({_id : id}, {$set: req.body})
+    await Post.findByIdAndUpdate(id ,req.body)
     .exec()
     .then(result => {
-        console.log(result);
+        console.log(req.body);
         res.status(200).json({
             // updatedData: updatePost,
             message : 'Post detail updated successfully'
